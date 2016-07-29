@@ -2,19 +2,15 @@ module Ramdo
   module Ramdisk
     class LinuxWrapper
       def initialize
-        @shm_path = "/dev/shm"
+        line = Cocaine::CommandLine.new("cat", "/proc/mounts")
+        line.run.each_line do |line|
+          @shm_path = Regexp.last_match[1] if line =~ /(\/shm)[\s]tmpfs[\s]rw/
+        end
+        raise GeneralRamdiskException.new("shm path not found") unless @shm_path
       end
 
       def list
         disks = []
-
-        found_shm = false
-        line = Cocaine::CommandLine.new("cat", "/proc/mounts")
-        line.run.each_line do |line|
-          found_shm ||= line =~ /^tmpfs \/dev\/shm tmpfs/
-        end
-        raise GeneralRamdiskException.new("#{@shm_path} not found") unless found_shm
-
         Dir.glob(@shm_path + '/*').each do |dir|
           if dir =~ Instance::NAME_PATTERN
             disks << Instance.new(path: dir, device: @shm_path, size: Filesize.from("1 GB"))
