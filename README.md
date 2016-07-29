@@ -14,6 +14,24 @@ And then execute:
 
     $ bundle
 
+## How to use
+
+Acutally quite simple
+
+```ruby
+require 'ramdo'
+store = Ramdo::Store.new
+store.data = 'Some Data'
+
+puts `cat #{store.file}`
+# Some Data
+
+puts store.data
+# Some Data
+
+```
+
+
 ## Low-level API usage
 ### Create a new RAM disk
 
