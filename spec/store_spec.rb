@@ -19,6 +19,13 @@ describe Store do
     expect(store.data).to eq(test_data)
   end
 
+  it 'should create a new store with a specific file extension' do
+    extension = '.bin'
+
+    store = Store.new(extension: extension)
+    expect(File.extname(store.file)).to eq(extension)
+  end
+
   it 'should create a new store and write data to it' do
     test_data = 'make me sexy'
 

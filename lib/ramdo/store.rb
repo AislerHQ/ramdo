@@ -2,7 +2,7 @@ module Ramdo
   class Store
     attr_reader :file, :uuid
 
-    def initialize
+    def initialize(opts = {})
       wrapper = Ramdisk::Factory.get
       list = wrapper.list
       if list.length <= 0
@@ -15,7 +15,7 @@ module Ramdo
       end
 
       @uuid = SecureRandom.uuid
-      @filename = 'ramdo_' + @uuid
+      @filename = "ramdo_#{@uuid}#{opts[:extension]}"
       @file = [@disk.path, @filename].join('/') # No Windows support!
     end
 
