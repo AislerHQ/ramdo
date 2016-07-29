@@ -35,7 +35,7 @@ module Ramdo
         device.strip!
 
         # Format RAM disk
-        line = Cocaine::CommandLine.new("diskutil", "erasevolume HFS+ 'ramdisk_#{SecureRandom.uuid}' #{device}")
+        line = Cocaine::CommandLine.new("diskutil", "erasevolume HFS+ '#{Instance.generate_name}' #{device}")
         line.run
 
         # Receive all disk and select just created one

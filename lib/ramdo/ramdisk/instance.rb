@@ -1,6 +1,10 @@
 module Ramdo
   module Ramdisk
     class Instance
+      def self.generate_name
+        "ramdo_#{SecureRandom.uuid}"
+      end
+
       attr_accessor :device, :path, :size
 
       def initialize(info = {})
