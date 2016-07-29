@@ -2,6 +2,7 @@ module Ramdo
   module Ramdisk
     class LinuxWrapper
       def initialize
+        @shm_path = "/dev/shm"
       end
 
       def list
@@ -12,49 +13,49 @@ module Ramdo
         line.run.each_line do |line|
           found_shm ||= line =~ /^tmpfs \/dev\/shm tmpfs/
         end
-        raise GeneralRamdiskException.new('/dev/shm not mounted') unless found_shm
+        raise GeneralRamdiskException.new("#{@shm_path} not found") unless found_shm
 
-        Dir.glob('/dev/shm').each do |dir|
-          if dir =~ Instance.NAME_PATTERN
-            disks << Instance.new(path: dir, device: '/dev/shm', size: Filesize.from(" MB"))
+        Dir.glob(@shm_path + '/*').each do |dir|
+          if dir =~ Instance::NAME_PATTERN
+            disks << Instance.new(path: dir, device: @shm_path, size: Filesize.from("1 GB"))
           end
         end
 
+        disks
       end
 
       def create(size)
         size = Filesize.from(size) if size.is_a? String
         raise NotEnoughFreeRamException.new unless enough_ram? size
 
-        # Allocate new RAM space
-        line = Cocaine::CommandLine.new("hdiutil", "attach -nomount ram://#{(size.to('MB') * 2048).to_i}")
-        device = line.run
-        device.strip!
-
-        # Format RAM disk
-        line = Cocaine::CommandLine.new("diskutil", "erasevolume HFS+ '#{Instance.generate_name}' #{device}")
-        line.run
+        # Create new directory as dedicated space
+        path = [@shm_path, Instance.generate_name].join('/')
+        Dir.mkdir(path)
 
         # Receive all disk and select just created one
-        list().select { |disk| disk.device == device }.first
+        list().select { |disk| disk.path == path }.first
+      end
+
+      def destroy(instance)
+        return false unless File.exist? instance.path
+
+        Dir.glob(instance.path + "/*").each { |file| File.delete(file) if File.file? file }
+        Dir.rmdir(instance.path)
       end
 
       private
       def enough_ram?(size)
         size = Filesize.from(size) if size.is_a? String
-        pages_free = 0
-        page_size = 0
+        free_mem = ""
 
-        line = Cocaine::CommandLine.new("vm_stat")
+        line = Cocaine::CommandLine.new("cat", "/proc/meminfo")
         line.run.each_line do |line|
-          if line =~ /^Pages free:[\s]+([0-9]+)./
-            pages_free = Regexp.last_match[1].to_i
-          elsif line =~ /^Mach Virtual Memory Statistics: +\(page size of ([0-9]+) bytes\)/
-            page_size = Regexp.last_match[1].to_i
+          if line =~ /^MemFree:[\s]+([0-9]+ kB)/
+            free_mem = Regexp.last_match[1]
           end
         end
 
-        Filesize.new(pages_free * page_size) > size
+        Filesize.from(free_mem) > size
       end
     end
   end

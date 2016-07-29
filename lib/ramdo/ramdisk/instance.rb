@@ -1,7 +1,7 @@
 module Ramdo
   module Ramdisk
     class Instance
-      NAME_PATTERN = /^ramdo_[A-Za-z0-9_-]$/
+      NAME_PATTERN = /ramdo_[A-Za-z0-9_-]+$/
 
       def self.generate_name
         "ramdo_#{SecureRandom.uuid}"
@@ -16,10 +16,8 @@ module Ramdo
       end
 
       def destroy!
-        return false unless File.exist? @device
-
-        line = Cocaine::CommandLine.new("hdiutil", "detach :device")
-        line.run(device: @device)
+        wrapper = Ramdisk::Factory.get
+        wrapper.destroy self
       end
     end
   end

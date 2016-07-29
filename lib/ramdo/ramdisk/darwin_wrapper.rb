@@ -42,6 +42,13 @@ module Ramdo
         list().select { |disk| disk.device == device }.first
       end
 
+      def destroy(instance)
+        return false unless File.exist? instance.device
+
+        line = Cocaine::CommandLine.new("hdiutil", "detach :device")
+        line.run(device: instance.device)
+      end
+
       private
       def enough_ram?(size)
         size = Filesize.from(size) if size.is_a? String
