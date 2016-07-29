@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Ramdo::VERSION
   spec.authors       = ["Patrick Franken"]
   spec.email         = ["p.franken@aisler.net"]
-  spec.summary       = "Fast temporary store supported by RAM disks"
+  spec.summary       = "Fast temporary store powered by RAM disks"
   spec.description   = spec.summary
   spec.homepage      = "http://aisler.net"
   spec.license       = "MIT"

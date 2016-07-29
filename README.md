@@ -1,6 +1,6 @@
 # Ramdo
 
-Fast temporary store supported by RAM disks.
+Fast temporary store powered by RAM disks.
 
 ## Installation
 
