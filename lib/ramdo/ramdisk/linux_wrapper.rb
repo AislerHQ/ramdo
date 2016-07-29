@@ -4,7 +4,7 @@ module Ramdo
       def initialize
         line = Cocaine::CommandLine.new("cat", "/proc/mounts")
         line.run.each_line do |line|
-          @shm_path = Regexp.last_match[1] if line =~ /(\/shm)[\s]tmpfs[\s]rw/
+          @shm_path = Regexp.last_match[1] if line =~ /(\/[a-z]+\/shm)[\s]tmpfs[\s]rw/
         end
         raise GeneralRamdiskException.new("shm path not found") unless @shm_path
       end
