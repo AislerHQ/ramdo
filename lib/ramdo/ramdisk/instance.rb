@@ -1,6 +1,8 @@
 module Ramdo
   module Ramdisk
     class Instance
+      NAME_PATTERN = /^ramdo_[A-Za-z0-9_-]$/
+
       def self.generate_name
         "ramdo_#{SecureRandom.uuid}"
       end
