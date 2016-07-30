@@ -2,7 +2,7 @@ require 'spec_helper'
 
 include Ramdo
 describe Ramdisk::Factory do
-  after(:each) do
+  before(:each) do
     wrapper = Ramdisk::Factory.get
     wrapper.list.each do |disk|
       disk.destroy!
@@ -14,6 +14,7 @@ describe Ramdisk::Factory do
     wrapper = Ramdisk::Factory.get
     disks = wrapper.list
     expect(disks).to be_an(Array)
+    expect(disks.length).to be_a(Integer)
     expect(disks.length).to be(0)
   end
 

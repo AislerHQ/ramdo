@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 include Ramdo
-describe Store do
+describe Store, focus: true do
   after(:all) do
     wrapper = Ramdisk::Factory.get
     wrapper.list.each do |disk|
