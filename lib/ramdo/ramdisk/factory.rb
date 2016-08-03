@@ -7,7 +7,7 @@ module Ramdo
         elsif RUBY_PLATFORM =~ /darwin/
           DarwinWrapper.new
         else
-          raise OSNotSupportedException.new("Could not find Ramdisk wrapper for #{RUBY_PLATFORM}")
+          GenericWrapper.new
         end
       end
     end

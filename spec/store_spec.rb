@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 include Ramdo
-describe Store, focus: true do
+describe Store do
   after(:all) do
     wrapper = Ramdisk::Factory.get
     wrapper.list.each do |disk|
@@ -41,6 +41,7 @@ describe Store, focus: true do
     store.data = 'Test'
     store.truncate
     expect(File.exist?(store.file)).to be_falsey
+    expect(Dir.exist?(store.dir)).to be_falsey
   end
 
   it 'should use existing RAM disk if available' do
@@ -54,4 +55,13 @@ describe Store, focus: true do
     expect(wrapper.list.length).to eq(1)
   end
 
+  it 'should allow to define a specific file extension' do
+    store = Store.new(extension: 'png')
+    store.data = 'make me sexy'
+    expect(File.extname(store.file)).to eq('.png')
+
+    store = Store.new(extension: '.png')
+    store.data = 'make me sexy'
+    expect(File.extname(store.file)).to eq('.png')
+  end
 end

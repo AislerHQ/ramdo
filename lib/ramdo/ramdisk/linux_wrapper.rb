@@ -12,8 +12,8 @@ module Ramdo
       def list
         disks = []
         Dir.glob(@shm_path + '/*').each do |dir|
-          if dir =~ Instance::NAME_PATTERN
-            disks << Instance.new(path: dir, device: @shm_path, size: Filesize.from("1 GB"))
+          if dir.split(File::SEPARATOR).last =~ Instance::NAME_PATTERN
+            disks << Instance.new(self, path: dir, device: @shm_path, size: Filesize.from("1 GB"))
           end
         end
 
@@ -34,9 +34,7 @@ module Ramdo
 
       def destroy(instance)
         return false unless File.exist? instance.path
-
-        Dir.glob(instance.path + "/*").each { |file| File.delete(file) if File.file? file }
-        Dir.rmdir(instance.path)
+        FileUtils.rm_r instance.path, :force => true
       end
 
       private

@@ -22,7 +22,7 @@ module Ramdo
           end
         end
 
-        disks.map { |d| Instance.new(d) if d.has_key? :is_ram_disk }.compact
+        disks.map { |d| Instance.new(self, d) if d.has_key? :is_ram_disk }.compact
       end
 
       def create(size)
