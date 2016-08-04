@@ -25,7 +25,7 @@ module Ramdo
         raise NotEnoughFreeRamException.new unless enough_ram? size
 
         # Create new directory as dedicated space
-        path = [@shm_path, Instance.generate_name].join('/')
+        path = File.join(@shm_path, Instance.generate_name)
         Dir.mkdir(path)
 
         # Receive all disk and select just created one
