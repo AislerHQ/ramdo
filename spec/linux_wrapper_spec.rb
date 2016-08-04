@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 include Ramdo
-describe Ramdisk::DarwinWrapper, if: os?(/darwin/) do
+describe Ramdisk::LinuxWrapper, if: os?(/linux/) do
   before(:each) do
-    wrapper = Ramdisk::DarwinWrapper.new
+    wrapper = Ramdisk::LinuxWrapper.new
     wrapper.list.each do |disk|
       disk.destroy!
     end
@@ -11,7 +11,7 @@ describe Ramdisk::DarwinWrapper, if: os?(/darwin/) do
 
 
   it 'should check if a ramdisk already exists' do
-    wrapper = Ramdisk::DarwinWrapper.new
+    wrapper = Ramdisk::LinuxWrapper.new
     disks = wrapper.list
     expect(disks).to be_an(Array)
     expect(disks.length).to be_a(Integer)
@@ -19,7 +19,7 @@ describe Ramdisk::DarwinWrapper, if: os?(/darwin/) do
   end
 
   it 'should check if enough RAM space is free' do
-    wrapper = Ramdisk::DarwinWrapper.new
+    wrapper = Ramdisk::LinuxWrapper.new
     expect(wrapper.send(:enough_ram?, '100 MB')).to be_truthy
     expect(wrapper.send(:enough_ram?, '100 GB')).to be_falsey
   end
@@ -27,7 +27,7 @@ describe Ramdisk::DarwinWrapper, if: os?(/darwin/) do
   it 'should create a new RAM disk and save a file to it' do
     size = '100 MB'
 
-    wrapper = Ramdisk::DarwinWrapper.new
+    wrapper = Ramdisk::LinuxWrapper.new
     disk = wrapper.create(size)
 
     expect(disk).to be_an(Ramdisk::Instance)
@@ -35,7 +35,7 @@ describe Ramdisk::DarwinWrapper, if: os?(/darwin/) do
   end
 
   it 'should remove a RAM disk' do
-    wrapper = Ramdisk::DarwinWrapper.new
+    wrapper = Ramdisk::LinuxWrapper.new
     disk = wrapper.create('100 MB')
 
     count = wrapper.list.length
@@ -46,7 +46,7 @@ describe Ramdisk::DarwinWrapper, if: os?(/darwin/) do
   end
 
   it 'should list all available RAM disks' do
-    wrapper = Ramdisk::DarwinWrapper.new
+    wrapper = Ramdisk::LinuxWrapper.new
     disk = wrapper.create('100 MB')
 
     list = wrapper.list
