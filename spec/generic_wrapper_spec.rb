@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 include Ramdo
-describe Ramdisk::GenericWrapper, focus: true do
+describe Ramdisk::GenericWrapper do
   before(:each) do
     wrapper = Ramdisk::GenericWrapper.new
     wrapper.list.each do |disk|

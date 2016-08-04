@@ -26,6 +26,13 @@ describe Store do
     expect(File.extname(store.file)).to eq(extension)
   end
 
+  it 'should create a new store with data' do
+    test_data = 'make me sexy'
+
+    store = Store.new(data: test_data)
+    expect(IO.read(store.file)).to eq(test_data)
+  end
+
   it 'should create a new store and write data to it' do
     test_data = 'make me sexy'
 

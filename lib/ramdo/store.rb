@@ -27,14 +27,16 @@ module Ramdo
       @file = File.join(@dir, "store.#{ext}")
 
       Dir.mkdir(@dir)
+
+      self.data = opts[:data] if opts.has_key?(:data)
     end
 
     def data=(data)
-      IO.write(@file, data)
+      IO.binwrite(@file, data)
     end
 
     def data
-      IO.read(@file)
+      IO.binread(@file)
     end
 
     def truncate
