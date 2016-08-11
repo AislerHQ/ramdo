@@ -17,6 +17,6 @@ require 'ramdo/cleaner'
 module Ramdo
   DEFAULTS = {
     disk_size: '100mb',
-    ttl: 120 # In seconds
+    ttl: 3600 # In seconds
   }
 end
