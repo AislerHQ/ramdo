@@ -9,13 +9,29 @@ describe Store do
   end
 
   it 'should create a new store and append data to it' do
-    test_data = 'make me sexy'
+    test_data = "make me sexy"
 
     store = Store.new
+    expect(File.exist?(store.file)).to be_falsey
+
     store.data = test_data
 
+    expect(File.exist?(store.file)).to be_truthy
     expect(IO.read(store.file)).to eq(test_data)
     expect(store.data).to eq(test_data)
+  end
+
+  it 'should create a new store and append empty data to it' do
+    test_data = nil
+
+    store = Store.new
+    expect(File.exist?(store.file)).to be_falsey
+
+    store.data = test_data
+
+    expect(File.exist?(store.file)).to be_truthy
+    expect(IO.read(store.file)).to eq("")
+    expect(store.data).to eq("")
   end
 
   it 'should create a new store with a specific file extension' do
