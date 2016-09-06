@@ -3,8 +3,7 @@ require 'spec_helper'
 include Ramdo
 describe Store do
   after(:all) do
-    wrapper = Ramdisk::Factory.get
-    wrapper.list.each do |disk|
+    DiskInstance.list.each do |disk|
       disk.destroy!
     end
   end
@@ -52,14 +51,12 @@ describe Store do
   end
 
   it 'should use existing RAM disk if available' do
-    wrapper = Ramdisk::Factory.get
-
-    wrapper.list.each { |disk| disk.destroy! }
-    expect(wrapper.list.length).to eq(0)
+    DiskInstance.list.each { |disk| disk.destroy! }
+    expect(DiskInstance.list.length).to eq(0)
     store_1 = Store.new
-    expect(wrapper.list.length).to eq(1)
+    expect(DiskInstance.list.length).to eq(1)
     store_2 = Store.new
-    expect(wrapper.list.length).to eq(1)
+    expect(DiskInstance.list.length).to eq(1)
   end
 
   it 'should allow to define a specific file extension' do

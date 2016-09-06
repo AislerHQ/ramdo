@@ -5,16 +5,12 @@ module Ramdo
     attr_reader :file, :dir
 
     def initialize(opts = {})
-      wrapper = Ramdisk::Factory.get
-      list = wrapper.list
+      list = DiskInstance.list
       disk = nil
       if list.length <= 0
-        # Create a new Ramdisk
-        disk = wrapper.create(DEFAULTS[:disk_size])
+        disk = DiskInstance.create
       else
-        # Use one which is large enough
-        list.each { |d| disk = d if d.size >= Filesize.from(DEFAULTS[:disk_size]) }
-        disk = wrapper.create(DEFAULTS[:disk_size]) if disk.nil?
+        disk = list.first
       end
 
       # Every time a new store is created we check if any other store is out of date
@@ -28,7 +24,11 @@ module Ramdo
 
       Dir.mkdir(@dir)
 
-      self.data = opts[:data] if opts.has_key?(:data)
+      if opts.has_key?(:data)
+        self.data = opts[:data]
+      elsif opts.has_key?(:file)
+        FileUtils.cp opts[:file], @file
+      end
     end
 
     def data=(data)
