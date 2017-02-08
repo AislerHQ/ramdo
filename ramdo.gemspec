@@ -6,7 +6,7 @@ require 'ramdo/version'
 Gem::Specification.new do |spec|
   spec.name          = "ramdo"
   spec.version       = Ramdo::VERSION
-  spec.authors       = ["Patrick Franken"]
+  spec.authors       = ["AISLER B.V.", "Patrick Franken"]
   spec.email         = ["p.franken@aisler.net"]
   spec.summary       = "Fast temporary store powered by RAM disks"
   spec.description   = spec.summary
