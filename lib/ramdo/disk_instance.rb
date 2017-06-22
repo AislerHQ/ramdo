@@ -5,7 +5,7 @@ module Ramdo
     def self.list
       disks = []
       Dir.glob('/tmp/*').each do |dir|
-        if dir.split(File::SEPARATOR).last =~ NAME_PATTERN
+        if (dir.split(File::SEPARATOR).last =~ NAME_PATTERN) && File.writable?(dir)
           disks << self.new(dir)
         end
       end
