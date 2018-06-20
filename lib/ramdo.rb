@@ -1,4 +1,3 @@
-require 'cocaine'
 require 'pp'
 require 'filesize'
 require 'securerandom'
